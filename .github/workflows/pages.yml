@@ -20,7 +20,7 @@ concurrency:
 jobs:
   deploy:
     name: Publish public landing page
-    runs-on: [self-hosted, Linux, ARM64, leopere, local, docker]
+    runs-on: [self-hosted, Linux, ARM64, leopere, local, public-safe]
     timeout-minutes: 15
     environment:
       name: github-pages
