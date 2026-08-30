@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Detailed, evidence-based technical assessments for modern websites across search visibility, accessibility, security, performance, content, and desktop and mobile experience.">
   <meta name="theme-color" content="#102f3d">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self' https://forms.motherboardrepair.ca; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; object-src 'none'">
   <title>Audit My Sites | Evidence-based website assessments</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <style>
@@ -149,13 +150,27 @@
     .cta p { max-width: 650px; margin: 0 auto 1.7rem; color: var(--muted); font-size: 1.1rem; }
     .cta .button { color: #fff; background: var(--navy); }
     .cta .button:hover { background: var(--navy-light); }
+    .assessment-form { max-width: 760px; margin: 2.25rem auto 0; padding: clamp(1.4rem, 4vw, 2.4rem); border: 1px solid var(--line); border-radius: 1rem; background: #fff; box-shadow: var(--shadow); text-align: left; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .field { display: grid; gap: .4rem; }
+    .field-wide { grid-column: 1 / -1; }
+    .field label, .consent { font-weight: 700; }
+    .field input, .field textarea { width: 100%; padding: .8rem .9rem; border: 1px solid #aebdc1; border-radius: .45rem; color: var(--ink); background: #fff; font: inherit; }
+    .field textarea { min-height: 8rem; resize: vertical; }
+    .field input:focus, .field textarea:focus { outline: 3px solid rgb(98 228 195 / 45%); border-color: var(--navy); }
+    .consent { display: flex; gap: .65rem; align-items: flex-start; margin: 1rem 0; font-size: .95rem; }
+    .consent input { margin-top: .35rem; }
+    .form-status { min-height: 1.65rem; margin: .75rem 0; color: var(--muted); }
+    .assessment-form .button { border: 0; cursor: pointer; }
+    .assessment-form .button:disabled { cursor: wait; opacity: .65; }
+    .honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
     footer { padding: 2rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
     footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 
     @media (max-width: 760px) {
       .site-header .button { display: none; }
       .hero { min-height: 680px; }
-      .grid, .deliverables-layout { grid-template-columns: 1fr; }
+      .grid, .deliverables-layout, .form-grid { grid-template-columns: 1fr; }
       .card { min-height: 0; }
       .number { margin-bottom: 1.7rem; }
     }
@@ -173,7 +188,7 @@
         <img class="mark" src="favicon.svg" alt="">
         <span>Audit My Sites</span>
       </a>
-      <a class="button button-secondary" href="mailto:colin@nixc.us?subject=AuditMySites.com%20technical%20assessment">Request an assessment</a>
+      <a class="button button-secondary" href="#request">Request an assessment</a>
     </div>
   </header>
 
@@ -184,7 +199,7 @@
         <h1>See what your website is really saying.</h1>
         <p class="lede">Audit My Sites combines a focused site crawl, broad technical checks, search-demand evidence, and desktop and mobile review in one clear assessment.</p>
         <div class="actions">
-          <a class="button button-primary" href="mailto:colin@nixc.us?subject=AuditMySites.com%20technical%20assessment&amp;body=Website%20URL%3A%20%0AWhat%20would%20you%20like%20to%20improve%3F%20">Request an assessment</a>
+          <a class="button button-primary" href="#request">Request an assessment</a>
           <a class="button button-secondary" href="#included">See what’s included</a>
         </div>
         <ul class="proof-points" aria-label="Assessment principles">
@@ -252,12 +267,30 @@
       </div>
     </section>
 
-    <section class="cta">
+    <section class="cta" id="request">
       <div class="wrap">
         <p class="eyebrow">Start with your URL</p>
         <h2>Ready for a clearer view of your website?</h2>
         <p>Send the site address, the markets you serve, and the questions you want the assessment to answer. We’ll define the scope before the review begins.</p>
-        <a class="button" href="mailto:colin@nixc.us?subject=AuditMySites.com%20technical%20assessment&amp;body=Website%20URL%3A%20%0ATarget%20market%3A%20%0AMain%20questions%3A%20">Request an assessment</a>
+        <form class="assessment-form" id="assessment-form">
+          <input type="hidden" name="form_id" value="auditmysites_assessment">
+          <div class="honeypot" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="form-grid">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" maxlength="100" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+            <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" required></div>
+            <div class="field"><label for="site-url">Website URL</label><input id="site-url" name="site_url" type="url" autocomplete="url" placeholder="https://example.com" maxlength="500" required></div>
+            <div class="field field-wide"><label for="market">Target market (optional)</label><input id="market" name="market" maxlength="160" placeholder="For example: Ontario, Canada"></div>
+            <div class="field field-wide"><label for="message">What should the assessment help you understand or improve?</label><textarea id="message" name="message" maxlength="2000" required></textarea></div>
+          </div>
+          <label class="consent"><input name="consent" type="checkbox" required><span>I agree that Audit My Sites may use this information to respond to my request.</span></label>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          <button class="button" id="submit-request" type="submit">Send assessment request</button>
+          <noscript><p>JavaScript is required for the protected form. Email <a href="mailto:colin@nixc.us">colin@nixc.us</a> instead.</p></noscript>
+        </form>
       </div>
     </section>
   </main>
@@ -268,5 +301,6 @@
       <span>Copyright © 2026 ColinKnapp.com. All rights reserved.</span>
     </div>
   </footer>
+  <script src="assessment-form.js" defer></script>
 </body>
 </html>
