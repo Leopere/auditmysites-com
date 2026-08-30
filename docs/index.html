@@ -107,22 +107,43 @@
       align-items: center;
     }
     .hero-copy { max-width: 720px; }
-    .hero-art { position: relative; margin-right: -6rem; transform: translateY(1rem); }
+    .hero-art {
+      position: relative;
+      isolation: isolate;
+      margin-right: -2rem;
+      padding: 1rem 0 2.5rem;
+      transform: translateY(.75rem);
+    }
     .hero-art::before {
       content: "";
       position: absolute;
-      inset: 12% 4% 7% 14%;
+      z-index: -1;
+      inset: 8% -4% 0 8%;
       border-radius: 50%;
-      background: rgb(98 228 195 / 13%);
-      filter: blur(3rem);
+      background: rgb(98 228 195 / 20%);
+      filter: blur(3.5rem);
     }
-    .hero-artwork {
-      position: relative;
+    .hero-photo {
       display: block;
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 2rem 3.5rem rgb(0 0 0 / 22%));
+      overflow: hidden;
+      border: 1px solid rgb(255 255 255 / 35%);
+      border-radius: 1rem;
+      background: var(--navy-light);
+      box-shadow: 0 2rem 4rem rgb(0 0 0 / 28%);
     }
+    .hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo-main { aspect-ratio: 4 / 3; transform: rotate(1deg); }
+    .hero-photo-main img { object-position: center; }
+    .hero-photo-inset {
+      position: absolute;
+      z-index: 1;
+      bottom: -.75rem;
+      left: -2rem;
+      width: 58%;
+      aspect-ratio: 16 / 10;
+      transform: rotate(-3deg);
+    }
+    .hero-photo-inset img { object-position: 58% center; }
     .eyebrow {
       margin: 0 0 1rem;
       color: var(--mint);
@@ -195,12 +216,15 @@
     @media (max-width: 980px) {
       .hero-layout { display: block; }
       .hero-copy { max-width: 850px; }
-      .hero-art { display: none; }
+      .hero-art { max-width: 44rem; margin: 2.5rem auto 0; padding: 0; transform: none; }
+      .hero-photo-main { aspect-ratio: 16 / 9; transform: none; }
+      .hero-photo-inset { display: none; }
     }
 
     @media (max-width: 760px) {
       .site-header .button { display: none; }
-      .hero { min-height: 680px; }
+      .hero { min-height: 680px; padding-bottom: 3rem; }
+      .hero-art { margin-top: 2rem; }
       .grid, .deliverables-layout, .form-grid { grid-template-columns: 1fr; }
       .card { min-height: 0; }
       .number { margin-bottom: 1.7rem; }
@@ -241,7 +265,14 @@
           </ul>
         </div>
         <div class="hero-art" aria-hidden="true">
-          <img class="hero-artwork" src="audit-evidence.svg" alt="" width="760" height="680" decoding="async">
+          <picture class="hero-photo hero-photo-main" data-source="aenow.com/application/files/7117/6409/3218/collab.webp">
+            <source srcset="aenow-collaboration.avif" type="image/avif">
+            <img src="aenow-collaboration.webp" alt="" width="960" height="540" loading="eager" decoding="async" fetchpriority="high">
+          </picture>
+          <picture class="hero-photo hero-photo-inset" data-source="aenow.com/application/files/7816/6741/8419/dom-blog.jpg">
+            <source srcset="aenow-workspace.avif" type="image/avif">
+            <img src="aenow-workspace.webp" alt="" width="1920" height="860" loading="eager" decoding="async">
+          </picture>
         </div>
       </div>
     </section>

@@ -1,13 +1,17 @@
 from html.parser import HTMLParser
 from pathlib import Path
-from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "docs/index.html").read_text()
 JS = (ROOT / "docs/assessment-form.js").read_text()
 WORKFLOW = (ROOT / ".github/workflows/pages.yml").read_text()
-SVG_PATH = ROOT / "docs/audit-evidence.svg"
-SVG = SVG_PATH.read_text()
+IMAGE_SOURCES = (ROOT / "docs/IMAGE_SOURCES.md").read_text()
+PHOTO_PATHS = [
+    ROOT / "docs/aenow-collaboration.avif",
+    ROOT / "docs/aenow-collaboration.webp",
+    ROOT / "docs/aenow-workspace.avif",
+    ROOT / "docs/aenow-workspace.webp",
+]
 
 
 def relative_luminance(hex_color):
@@ -50,16 +54,20 @@ assert "https://forms.motherboardrepair.ca/api/form-proof" in JS
 assert "https://forms.motherboardrepair.ca/api/submit" in JS
 assert "auditmysites_assessment" in JS
 assert "window.location.origin + window.location.pathname" in JS
-assert '<img class="hero-artwork" src="audit-evidence.svg" alt="" width="760" height="680" decoding="async">' in HTML
-assert HTML.count('src="audit-evidence.svg"') == 1
-assert "aenow" not in HTML.lower()
-svg_root = ElementTree.parse(SVG_PATH).getroot()
-assert svg_root.tag == "{http://www.w3.org/2000/svg}svg"
-assert svg_root.attrib["viewBox"] == "0 0 760 680"
-assert "width" not in svg_root.attrib and "height" not in svg_root.attrib
-assert SVG_PATH.stat().st_size < 12_000
-for forbidden_svg_content in ("<script", "<image", "<foreignobject", "href=", "url("):
-    assert forbidden_svg_content not in SVG.lower()
+assert '<picture class="hero-photo hero-photo-main" data-source="aenow.com/application/files/7117/6409/3218/collab.webp">' in HTML
+assert '<source srcset="aenow-collaboration.avif" type="image/avif">' in HTML
+assert '<img src="aenow-collaboration.webp" alt="" width="960" height="540" loading="eager" decoding="async" fetchpriority="high">' in HTML
+assert '<picture class="hero-photo hero-photo-inset" data-source="aenow.com/application/files/7816/6741/8419/dom-blog.jpg">' in HTML
+assert '<source srcset="aenow-workspace.avif" type="image/avif">' in HTML
+assert '<img src="aenow-workspace.webp" alt="" width="1920" height="860" loading="eager" decoding="async">' in HTML
+assert all(path.exists() and path.stat().st_size < 120_000 for path in PHOTO_PATHS)
+assert sum(path.stat().st_size for path in PHOTO_PATHS) < 350_000
+assert "The source archive did not include license, permission, or attribution metadata." in IMAGE_SOURCES
+assert "https://aenow.com/application/files/7117/6409/3218/collab.webp" in IMAGE_SOURCES
+assert "https://aenow.com/application/files/7816/6741/8419/dom-blog.jpg" in IMAGE_SOURCES
+responsive_hero_rule = HTML.split("@media (max-width: 980px) {", 1)[1].split("@media (max-width: 760px) {", 1)[0]
+assert ".hero-art { display: none; }" not in responsive_hero_rule
+assert ".hero-photo-inset { display: none; }" in responsive_hero_rule
 deliverables_eyebrow_rule = HTML.split(".deliverables .eyebrow {", 1)[1].split("}", 1)[0]
 assert "color: #08745f;" in deliverables_eyebrow_rule
 assert contrast_ratio("#08745f", "#ffffff") >= 4.5
