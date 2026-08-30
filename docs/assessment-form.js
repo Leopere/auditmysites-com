@@ -10,6 +10,7 @@
   const status = document.getElementById('form-status');
   const button = document.getElementById('submit-request');
   if (!form || !status || !button) return;
+  button.disabled = false;
 
   function base64Url(bytes) {
     let binary = '';
@@ -64,7 +65,7 @@
       phone: String(data.get('phone') || '').trim(),
       company: siteUrl,
       message: `Website: ${siteUrl}\nMarket: ${market || 'Not specified'}\n\nAssessment goals:\n${goals}`,
-      extra_fields: { website_url: siteUrl, target_market: market, source_url: window.location.href },
+      extra_fields: { website_url: siteUrl, target_market: market, source_url: window.location.origin + window.location.pathname },
     };
   }
 

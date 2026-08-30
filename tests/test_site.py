@@ -24,6 +24,8 @@ class FormParser(HTMLParser):
 parser = FormParser()
 parser.feed(HTML)
 assert parser.forms == ["assessment-form"]
+assert '<form class="assessment-form" id="assessment-form" method="post">' in HTML
+assert 'id="submit-request" type="submit" disabled' in HTML
 assert {"name", "email", "phone", "site_url", "message", "consent"} <= parser.required
 assert {"name", "email", "phone", "site-url", "market", "message"} <= parser.labels
 assert parser.status
@@ -33,6 +35,7 @@ assert '<script src="assessment-form.js" defer></script>' in HTML
 assert "https://forms.motherboardrepair.ca/api/form-proof" in JS
 assert "https://forms.motherboardrepair.ca/api/submit" in JS
 assert "auditmysites_assessment" in JS
+assert "window.location.origin + window.location.pathname" in JS
 assert "runs-on: [self-hosted, Linux, ARM64, leopere, local, public-safe]" in WORKFLOW
 assert "path: ./docs" in WORKFLOW
 print("site contract passed")
