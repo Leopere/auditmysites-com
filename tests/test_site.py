@@ -60,11 +60,16 @@ assert '<img src="aenow-collaboration.webp" alt="" width="960" height="540" load
 assert '<picture class="hero-photo hero-photo-inset" data-source="aenow.com/application/files/7816/6741/8419/dom-blog.jpg">' in HTML
 assert '<source srcset="aenow-workspace.avif" type="image/avif">' in HTML
 assert '<img src="aenow-workspace.webp" alt="" width="1920" height="860" loading="eager" decoding="async">' in HTML
+assert '<meta name="description" content="Evidence-based website assessments across search, security, performance, content, and accessibility for people, assistive technology, and AI agents.">' in HTML
+assert "Audit My Sites combines a focused site crawl, broad technical checks, search-demand evidence, and accessibility review for people and AI agents in one clear assessment." in HTML
 assert all(path.exists() and path.stat().st_size < 120_000 for path in PHOTO_PATHS)
 assert sum(path.stat().st_size for path in PHOTO_PATHS) < 350_000
 assert "The source archive did not include license, permission, or attribution metadata." in IMAGE_SOURCES
 assert "https://aenow.com/application/files/7117/6409/3218/collab.webp" in IMAGE_SOURCES
 assert "https://aenow.com/application/files/7816/6741/8419/dom-blog.jpg" in IMAGE_SOURCES
+assert "<h3>Accessibility for people and AI agents</h3>" in HTML
+assert "assistive technology, browser-based AI agents, traditional search engines, answer engines, and generative systems" in HTML
+assert "Accessibility findings are bounded observations, not certification or a guarantee of conformance." in HTML
 responsive_hero_rule = HTML.split("@media (max-width: 980px) {", 1)[1].split("@media (max-width: 760px) {", 1)[0]
 assert ".hero-art { display: none; }" not in responsive_hero_rule
 assert ".hero-photo-inset { display: none; }" in responsive_hero_rule
